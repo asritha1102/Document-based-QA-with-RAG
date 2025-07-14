@@ -1,0 +1,5 @@
+Data refers to raw facts and figures that can be processed, analyzed, or visualized to gain insights. In computing, data can be structured (like in databases), semi-structured (like XML or JSON), or unstructured (like images or plain text).
+
+Data plays a crucial role in AI and machine learning, where models are trained using large datasets. Clean, high-quality data is essential for building reliable AI systems.
+
+Data can be collected from various sources, such as sensors, user interactions, databases, and web scraping.
