@@ -1,4 +1,5 @@
 import os
+import tempfile
 from langchain.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import TextLoader, PyPDFLoader
@@ -8,22 +9,30 @@ from langchain.llms import HuggingFacePipeline
 import transformers
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 
-def load_documents(doc_folder='docs'):
-    if not os.path.exists(doc_folder):
-        os.makedirs(doc_folder)
-        print(f"✅ Created '{doc_folder}' folder. Please add .txt or .pdf files to it.")
-        return []
+from langchain.document_loaders import PyPDFLoader, TextLoader
+from langchain.document_loaders.base import BaseLoader
 
+def load_documents(uploaded_files):
     docs = []
-    for filename in os.listdir(doc_folder):
-        path = os.path.join(doc_folder, filename)
-        if filename.endswith('.txt'):
-            loader = TextLoader(path)
-            docs.extend(loader.load())
-        elif filename.endswith('.pdf'):
-            loader = PyPDFLoader(path)
-            docs.extend(loader.load())
+    for uploaded_file in uploaded_files:
+        suffix = uploaded_file.name.split('.')[-1]
+
+        # Save to temporary file
+        with tempfile.NamedTemporaryFile(delete=False, suffix=f".{suffix}") as tmp_file:
+            tmp_file.write(uploaded_file.read())
+            tmp_path = tmp_file.name
+
+        # Load depending on type
+        if suffix == "txt":
+            loader = TextLoader(tmp_path)
+        elif suffix == "pdf":
+            loader = PyPDFLoader(tmp_path)
+        else:
+            raise ValueError(f"Unsupported file type: {suffix}")
+
+        docs.extend(loader.load())
     return docs
+
 
 def build_vector_store(docs):
     if not docs:
