@@ -1,0 +1,5 @@
+RAG stands for Retrieval-Augmented Generation. It is a hybrid approach to question answering that combines information retrieval with natural language generation.
+
+In a RAG system, a retriever fetches relevant content from a knowledge base or document store using vector similarity search. The retrieved content is then passed to a language model that generates a human-like answer based on the context.
+
+RAG improves factual accuracy by grounding responses in real data, rather than relying purely on the language model’s training data.
